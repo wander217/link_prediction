@@ -1,0 +1,62 @@
+start_epoch: 1
+total_epoch: 1000
+
+alphabet:
+  path: 'asset/alphabet.txt'
+  max_len: 128
+
+structure:
+  encoder:
+    hidden_channel: 512
+    text_encoder:
+      vocab_len: -1
+      max_len: -1
+      n_head: 4
+      char_embedding_dim: -1
+      dim_feedforward: 1024
+      dropout: 0.1
+      n_layer: 3
+    position_encoder:
+      in_channel: 4
+      out_channel: -1
+  graph:
+    in_channel: 512
+    out_channel: 512
+    num_layer: 2
+    dropout: 0.1
+  decoder:
+    in_channel: 512
+    out_channel: 2
+
+optimizer:
+  name: 'Adam'
+  params:
+    lr: 0.001
+
+train:
+  batch_size: 4
+  num_workers: 2
+  drop_last: True
+  shuffle: True
+  pin_memory: False
+  dataset:
+    path: 'train.json'
+    knn_num: 6
+
+valid:
+  batch_size: 4
+  num_workers: 2
+  drop_last: True
+  shuffle: False
+  pin_memory: False
+  dataset:
+    path: 'valid.json'
+    knn_num: 6
+
+checkpoint:
+  workspace: './workspace'
+  resume: ''
+
+logger:
+  workspace: './workspace'
+  level: 'INFO'
