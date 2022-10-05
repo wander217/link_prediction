@@ -92,7 +92,7 @@ class Trainer:
             self._optim.step()
             train_loss.update(loss.item() * labels.size(0), labels.size(0))
             bath_acc: float = self._measure(predict, labels)
-            accurate.update(bath_acc * labels.size(0), labels.size(0))
+            accurate.update(bath_acc, labels.size(0))
         return {
             "loss": train_loss.calc(),
             "acc": accurate.calc(),
