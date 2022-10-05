@@ -40,7 +40,10 @@ def process(sample: Dict, alphabet: DocAlphabet):
         if text.shape[0] == 0:
             continue
         texts.append(text)
-        bboxes.append(np.array(target[BBOX_KEY]).astype(np.int32).flatten())
+        bbox = np.array(target[BBOX_KEY]).astype(np.int32)
+        x, y = bbox[:, 0].mean(), bbox[:, 1].mean()
+        w, h = np.linalg.norm(bbox[0, :] - bbox[1, :]), np.linalg.norm(bbox[1, :] - bbox[2, :])
+        bboxes.append([x, y, w, h])
         masks.append(mask)
         linked.append(target[LINKED_KEY])
     return (np.array(bboxes),
@@ -78,16 +81,12 @@ class DocDataset(Dataset):
         labels: List = []
         for i in range(node_size):
             dist: List = []
+            x_i, y_i, w_i, h_i = bboxes[i]
             for j in range(node_size):
                 if i == j:
                     continue
-                dist.append([
-                    min([
-                        np.linalg.norm(a - b)
-                        for a in bboxes[i].reshape(-1, 2)
-                        for b in bboxes[j].reshape(-1, 2)
-                    ]), j
-                ])
+                x_j, y_j, w_j, h_j = bboxes[j]
+                dist.append([np.linalg.norm(np.array([x_i - x_j, y_j - y_i])), j])
             dist = sorted(dist, key=lambda x: x[0])
             # select knn_num neighbor node
             for j in range(self._knn_num):
