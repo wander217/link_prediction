@@ -41,7 +41,7 @@ train_loader:
   pin_memory: False
   dataset:
     path: 'train.json'
-    knn_num: 3
+    knn_num: 6
 
 valid_loader:
   batch_size: 4
@@ -51,7 +51,7 @@ valid_loader:
   pin_memory: False
   dataset:
     path: 'valid.json'
-    knn_num: 3
+    knn_num: 6
 
 checkpoint:
   workspace: './workspace'
