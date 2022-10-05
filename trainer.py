@@ -150,7 +150,7 @@ if __name__ == "__main__":
         with open(args.config_path.strip()) as f:
             data: dict = yaml.safe_load(f)
     if args.alphabet_path.strip():
-        data['alphabet']['alphabet_path'] = args.alphabet_path.strip()
+        data['alphabet']['path'] = args.alphabet_path.strip()
     if args.resume.strip():
         data['checkpoint']['resume'] = args.resume.strip()
     if args.root_path.strip():
