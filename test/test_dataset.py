@@ -8,12 +8,12 @@ data = dataset.__getitem__(0)
 # print(texts[0])
 # print(masks[0])
 src, dst = graph.edges()
-print(src)
-print(dst)
-print(labels)
+# print(src)
+# print(dst)
+# print(labels)
 # for i in range(len(src)):
 #     if src[i] == 9:
 #         print(src[i], dst[i])
-# for i in range(len(labels)):
-#     if labels[i]:
-#         print(src[i], dst[i])
+for i in range(len(labels)):
+    if labels[i]:
+        print(src[i], dst[i])

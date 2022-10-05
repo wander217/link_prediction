@@ -30,6 +30,7 @@ def process(sample: Dict, alphabet: DocAlphabet):
 
     texts: List = []
     bboxes: List = []
+    bboxes_raw: List = []
     masks: List = []
     lengths: List = []
     linked: List = []
@@ -44,10 +45,12 @@ def process(sample: Dict, alphabet: DocAlphabet):
         x, y = bbox[:, 0].mean(), bbox[:, 1].mean()
         w, h = np.linalg.norm(bbox[0, :] - bbox[1, :]), np.linalg.norm(bbox[1, :] - bbox[2, :])
         bboxes.append([x, y, w, h])
+        bboxes_raw.append(bbox)
         masks.append(mask)
         linked.append(target[LINKED_KEY])
     return (np.array(bboxes),
             np.array(linked),
+            np.array(bboxes_raw),
             np.array(texts),
             np.array(lengths),
             np.array(masks))
@@ -74,19 +77,21 @@ class DocDataset(Dataset):
         self._load(path)
 
     def convert_data(self, sample):
-        bboxes, linked, texts, lengths, masks = process(sample, self._alphabet)
+        bboxes, linked, bboxes_raw, texts, lengths, masks = process(sample, self._alphabet)
         node_size = linked.shape[0]
         src: List = []
         dst: List = []
         labels: List = []
         for i in range(node_size):
             dist: List = []
-            x_i, y_i, w_i, h_i = bboxes[i]
             for j in range(node_size):
                 if i == j:
                     continue
-                x_j, y_j, w_j, h_j = bboxes[j]
-                dist.append([np.linalg.norm(np.array([x_i - x_j, y_j - y_i])), j])
+                dist.append([min([
+                    np.linalg.norm([x - y])
+                    for y in bboxes_raw[i]
+                    for x in bboxes_raw[j]
+                ]), j])
             dist = sorted(dist, key=lambda x: x[0])
             # select knn_num neighbor node
             for j in range(self._knn_num):
