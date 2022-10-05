@@ -41,7 +41,7 @@ def process(sample: Dict, alphabet: DocAlphabet):
         if text.shape[0] == 0:
             continue
         texts.append(text)
-        bboxes.append(np.array(target[BBOX_KEY]).astype(np.int32))
+        bboxes.append(np.array(target[BBOX_KEY]).astype(np.int32).flatten())
         masks.append(mask)
         linked.append(target[LINKED_KEY])
     return (np.array(bboxes),
@@ -72,8 +72,8 @@ class DocDataset(Dataset):
                 dist.append([
                     min([
                         np.linalg.norm(a - b)
-                        for a in bboxes[i]
-                        for b in bboxes[j]
+                        for a in bboxes[i].reshape(-1, 2)
+                        for b in bboxes[j].reshape(-1, 2)
                     ]), j
                 ])
             dist = sorted(dist, key=lambda x: x[0])

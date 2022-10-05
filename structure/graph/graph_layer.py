@@ -22,9 +22,9 @@ class GraphLayer(PaCModule):
             for _ in range(num_layer)
         ])
         self.dense: nn.ModuleList = nn.ModuleList([
-            DenseLayer(in_channel=in_channel,
+            DenseLayer(in_channel=out_channel + i * out_channel,
                        out_channel=out_channel)
-            for _ in range(num_layer)
+            for i in range(1, num_layer + 1)
         ])
 
     def forward(self,
@@ -40,7 +40,7 @@ class GraphLayer(PaCModule):
        :return: graph:  new graph structure (new_node_feature + edge)
                 new_node_feature: new_node_feature (N, D)
         """
-        all_node_feature: List = []
+        all_node_feature: List = [node_feature]
         new_node_feature = node_feature
         for i, conv in enumerate(self.gcn):
             graph, new_node_feature = conv(graph=graph,
@@ -48,6 +48,6 @@ class GraphLayer(PaCModule):
                                            node_factor=node_factor,
                                            node_num=node_num)
             all_node_feature.append(new_node_feature)
-            concat_node = torch.cat(all_node_feature, dim=1)
+            concat_node = torch.cat(all_node_feature, dim=-1)
             new_node_feature = self.dense[i](concat_node)
         return graph, new_node_feature

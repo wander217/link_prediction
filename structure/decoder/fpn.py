@@ -9,11 +9,11 @@ class FPN(PaCModule):
     def __init__(self, in_channel: int, out_channel: int):
         super().__init__()
         self.fc: nn.Sequential = nn.Sequential(
+            nn.Linear(in_features=in_channel * 2, out_features=in_channel, bias=False),
+            nn.LayerNorm(normalized_shape=in_channel),
             nn.Linear(in_features=in_channel, out_features=in_channel // 2, bias=False),
             nn.LayerNorm(normalized_shape=in_channel // 2),
-            nn.Linear(in_features=in_channel // 2, out_features=in_channel // 4, bias=False),
-            nn.LayerNorm(normalized_shape=in_channel // 4),
-            nn.Linear(in_features=in_channel // 4, out_features=out_channel, bias=False),
+            nn.Linear(in_features=in_channel // 2, out_features=out_channel, bias=False),
             nn.LayerNorm(normalized_shape=out_channel),
             nn.LogSoftmax(dim=1))
 

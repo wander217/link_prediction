@@ -28,5 +28,7 @@ class PositionalEmbedding(nn.Module):
         :param x: embed text (n,t,d)
         :return: positional embed text (n,t,d)
         """
-        output: Tensor = x + self.positional_embedding[:, :x.size(2), :]
+        pos: Tensor = self.positional_embedding[:, :x.size(1), :]
+        pos = pos.to(x.device)
+        output: Tensor = x + pos
         return output

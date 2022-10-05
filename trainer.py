@@ -78,6 +78,7 @@ class Trainer:
             labels = labels.to(self._device)
             texts = texts.to(self._device)
             masks = masks.to(self._device)
+            bboxes = bboxes.to(self._device)
             node_factors = node_factors.to(self._device)
             predict = self._model(graph=graphs,
                                   mask=masks,
@@ -104,6 +105,7 @@ class Trainer:
                 labels = labels.to(self._device)
                 texts = texts.to(self._device)
                 masks = masks.to(self._device)
+                bboxes = bboxes.to(self._device)
                 node_factors = node_factors.to(self._device)
                 predict = self._model(graph=graphs,
                                       mask=masks,

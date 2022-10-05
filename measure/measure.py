@@ -9,4 +9,4 @@ class Measure:
         pred_mat: np.ndarray = pred.detach().cpu().numpy()
         target_mat: np.ndarray = target.detach().cpu().numpy()
         n_correct: int = (pred_mat == target_mat).sum()
-        return n_correct / target_mat.size(0)
+        return n_correct / target_mat.shape[0]

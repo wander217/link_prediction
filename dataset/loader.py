@@ -36,7 +36,6 @@ def graph_collate(batch: Tuple, pad_encode: int = 0):
                                     'constant',
                                     constant_values=pad_encode))
     new_masks = np.array(new_masks)
-    print(new_texts[0], new_masks[0])
     new_bboxes = []
     for bbox in bboxes:
         for item in bbox:
