@@ -69,6 +69,7 @@ class Trainer:
     def train_step(self):
         self._model.train()
         train_loss: Averager = Averager()
+        accurate: Averager = Averager()
         for batch, (graphs, labels,
                     texts, bboxes,
                     masks, node_factors,
@@ -90,7 +91,12 @@ class Trainer:
             loss.backward()
             self._optim.step()
             train_loss.update(loss.item() * labels.size(0), labels.size(0))
-        return {"loss": train_loss.calc()}
+            bath_acc: float = self._measure(predict, labels)
+            accurate.update(bath_acc * labels.size(0), labels.size(0))
+        return {
+            "loss": train_loss.calc(),
+            "acc": accurate.calc(),
+        }
 
     def valid_step(self):
         self._model.eval()
@@ -116,7 +122,7 @@ class Trainer:
                 loss = self._criterion(predict, labels)
                 bath_acc: float = self._measure(predict, labels)
                 valid_loss.update(loss.item() * labels.size(0), labels.size(0))
-                accurate.update(bath_acc, labels.size(0))
+                accurate.update(bath_acc * labels.size(0), labels.size(0))
         return {
             "loss": valid_loss.calc(),
             "acc": accurate.calc(),
