@@ -15,5 +15,5 @@ class PositionEncoder(PaCModule):
         :param position: position feature (N, in_channel)
         :return: encoded bounding box position (N, out_channel)
         """
-        output: Tensor = self.act(self.norm(self.fc(position)))  # (B, N, out_channel)
+        output: Tensor = self.act(self.norm(self.fc(position)))  # (N, out_channel)
         return output

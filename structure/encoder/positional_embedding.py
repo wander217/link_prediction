@@ -20,7 +20,7 @@ class PositionalEmbedding(nn.Module):
         div_term: Tensor = torch.exp(hat)
         positional_embedding[:, 0::2] = torch.sin(position * div_term)
         positional_embedding[:, 1::2] = torch.cos(position * div_term)
-        positional_embedding = positional_embedding.unsqueeze(0).unsqueeze(0)
+        positional_embedding = positional_embedding.unsqueeze(0)
         self.register_buffer("positional_embedding", positional_embedding)
 
     def forward(self, x: Tensor):
@@ -28,5 +28,5 @@ class PositionalEmbedding(nn.Module):
         :param x: embed text (n,t,d)
         :return: positional embed text (n,t,d)
         """
-        output: Tensor = x + self.positional_embedding[:, :, :x.size(2), :]
+        output: Tensor = x + self.positional_embedding[:, :x.size(2), :]
         return output
