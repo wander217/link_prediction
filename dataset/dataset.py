@@ -4,7 +4,6 @@ from typing import List, Dict
 import dgl
 import json
 import numpy as np
-import cv2 as cv
 
 
 def process(sample: Dict, alphabet: DocAlphabet):
