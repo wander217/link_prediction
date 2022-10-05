@@ -22,7 +22,7 @@ structure:
   graph:
     in_channel: 512
     out_channel: 512
-    num_layer: 1
+    num_layer: 2
     dropout: 0.1
   decoder:
     in_channel: 512
