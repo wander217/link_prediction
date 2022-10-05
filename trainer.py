@@ -74,6 +74,7 @@ class Trainer:
                     masks, node_factors,
                     node_sizes) in enumerate(self._train_loader):
             self._optim.zero_grad()
+            graphs = graphs.to(self._device)
             labels = labels.to(self._device)
             texts = texts.to(self._device)
             masks = masks.to(self._device)
@@ -99,6 +100,7 @@ class Trainer:
                         texts, bboxes,
                         masks, node_factors,
                         node_sizes) in enumerate(self._valid_loader):
+                graphs = graphs.to(self._device)
                 labels = labels.to(self._device)
                 texts = texts.to(self._device)
                 masks = masks.to(self._device)
