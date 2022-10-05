@@ -134,7 +134,6 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--config_path", type=str, default='', help="config path")
     parser.add_argument("-p", "--root_path", type=str, default='', help="dataset root path")
     parser.add_argument("-a", "--alphabet_path", type=str, default='', help="alphabet path")
-    parser.add_argument("-l", "--label_path", type=str, default='', help="label path")
     parser.add_argument("-r", "--resume", type=str, default='', help="checkpoint path")
     args = parser.parse_args()
     if args.config_path.strip():
