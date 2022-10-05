@@ -17,7 +17,7 @@ structure:
       dropout: 0.1
       n_layer: 3
     position_encoder:
-      in_channel: 8
+      in_channel: 4
       out_channel: -1
   graph:
     in_channel: 512
