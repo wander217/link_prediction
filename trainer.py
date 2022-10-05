@@ -74,6 +74,10 @@ class Trainer:
                     masks, node_factors,
                     node_sizes) in enumerate(self._train_loader):
             self._optim.zero_grad()
+            labels = labels.to(self._device)
+            texts = texts.to(self._device)
+            masks = masks.to(self._device)
+            node_factors = node_factors.to(self._device)
             predict = self._model(graph=graphs,
                                   mask=masks,
                                   position=bboxes,
@@ -95,6 +99,10 @@ class Trainer:
                         texts, bboxes,
                         masks, node_factors,
                         node_sizes) in enumerate(self._valid_loader):
+                labels = labels.to(self._device)
+                texts = texts.to(self._device)
+                masks = masks.to(self._device)
+                node_factors = node_factors.to(self._device)
                 predict = self._model(graph=graphs,
                                       mask=masks,
                                       position=bboxes,
