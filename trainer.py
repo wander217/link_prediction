@@ -71,11 +71,11 @@ class Trainer:
         train_loss: Averager = Averager()
         for batch, (graphs, labels,
                     texts, bboxes,
-                    marks, node_factors,
+                    masks, node_factors,
                     node_sizes) in enumerate(self._train_loader):
             self._optim.zero_grad()
             predict = self._model(graph=graphs,
-                                  mask=marks,
+                                  mask=masks,
                                   position=bboxes,
                                   txt=texts,
                                   node_factor=node_factors,
@@ -93,10 +93,10 @@ class Trainer:
         with torch.no_grad():
             for batch, (graphs, labels,
                         texts, bboxes,
-                        marks, node_factors,
+                        masks, node_factors,
                         node_sizes) in enumerate(self._valid_loader):
                 predict = self._model(graph=graphs,
-                                      mask=marks,
+                                      mask=masks,
                                       position=bboxes,
                                       txt=texts,
                                       node_factor=node_factors,

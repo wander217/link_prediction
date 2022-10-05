@@ -1,4 +1,3 @@
-import torch
+import numpy as np
 
-a = torch.FloatTensor([[1, 2], [2, 3]])
-print(a.sum(dim=-1))
+print(np.pad([1, 2], (0, 3)))

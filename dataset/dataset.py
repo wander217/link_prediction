@@ -4,6 +4,7 @@ from typing import List, Dict
 import dgl
 import json
 import numpy as np
+import cv2 as cv
 
 
 def process(sample: Dict, alphabet: DocAlphabet):
@@ -25,13 +26,14 @@ def process(sample: Dict, alphabet: DocAlphabet):
     """
     TARGET_KEY = "target"
     TEXT_KEY = "text"
-    BBOX_KEY = "box"
-    LINKED_KEY = "linked"
+    BBOX_KEY = "bbox"
+    LINKED_KEY = "link"
 
     texts: List = []
     bboxes: List = []
     masks: List = []
     lengths: List = []
+    linked: List = []
     for target in sample[TARGET_KEY]:
         text = alphabet.encode(target[TEXT_KEY])
         mask = np.ones(text.shape[0])
@@ -41,7 +43,7 @@ def process(sample: Dict, alphabet: DocAlphabet):
         texts.append(text)
         bboxes.append(np.array(target[BBOX_KEY]).astype(np.int32))
         masks.append(mask)
-    linked: List = sample[LINKED_KEY]
+        linked.append(target[LINKED_KEY])
     return (np.array(bboxes),
             np.array(linked),
             np.array(texts),
@@ -64,18 +66,22 @@ class DocDataset(Dataset):
         labels: List = []
         for i in range(node_size):
             dist: List = []
-            x_i, y_i, w_i, h_i = bboxes[i]
             for j in range(node_size):
                 if i == j:
                     continue
-                x_j, y_j, w_j, h_j = bboxes[j]
-                dist.append([np.linalg.norm(np.array([x_i - x_j, y_i - y_j])), j])
-            sorted(dist, key=lambda x: x[0])
+                dist.append([
+                    min([
+                        np.linalg.norm(a - b)
+                        for a in bboxes[i]
+                        for b in bboxes[j]
+                    ]), j
+                ])
+            dist = sorted(dist, key=lambda x: x[0])
             # select knn_num neighbor node
             for j in range(self._knn_num):
-                labels.append(linked[i] == j)
+                labels.append(linked[i] == dist[j][1])
                 src.append(i)
-                dst.append(j)
+                dst.append(dist[j][1])
         graph = dgl.DGLGraph()
         graph.add_nodes(node_size)
         graph.add_edges(src, dst)

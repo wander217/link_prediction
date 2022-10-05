@@ -20,27 +20,37 @@ def graph_collate(batch: Tuple, pad_encode: int = 0):
     labels = np.concatenate(labels).flatten()
     # find max length to padding
     max_len: int = np.max(np.concatenate(lengths))
-    new_text: List = [np.expand_dims(np.pad(text,
-                                            (0, max_len - text.shape[0]),
-                                            'constant',
-                                            constant_values=pad_encode), axis=0)
-                      for text in texts]
-    texts = np.concatenate(new_text)
-    new_mask: List = [np.expand_dims(np.pad(mask,
-                                            (0, max_len - mask.shape[0]),
-                                            'constant',
-                                            constant_values=pad_encode), axis=0)
-                      for mask in masks]
-    marks = np.concatenate(new_mask)
+    new_texts = []
+    for text in texts:
+        for item in text:
+            new_texts.append(np.pad(item,
+                                    (0, max_len - item.shape[0]),
+                                    'constant',
+                                    constant_values=pad_encode))
+    new_texts = np.array(new_texts)
+    new_masks = []
+    for mask in masks:
+        for item in mask:
+            new_masks.append(np.pad(item,
+                                    (0, max_len - item.shape[0]),
+                                    'constant',
+                                    constant_values=pad_encode))
+    new_masks = np.array(new_masks)
+    print(new_texts[0], new_masks[0])
+    new_bboxes = []
+    for bbox in bboxes:
+        for item in bbox:
+            new_bboxes.append(item)
+    new_bboxes = np.array(new_bboxes)
     node_sizes = [graph.number_of_nodes() for graph in graphs]
     node_factor: Tensor = get_factor(node_sizes)
     batched_graph = dgl.batch(graphs)
 
     return (batched_graph,
-            torch.from_numpy(labels),
-            torch.from_numpy(texts),
-            torch.from_numpy(bboxes),
-            torch.from_numpy(marks),
+            torch.from_numpy(labels).byte(),
+            torch.from_numpy(new_texts).long(),
+            torch.from_numpy(new_bboxes).float(),
+            torch.from_numpy(new_masks).bool(),
             node_factor,
             node_sizes)
 
