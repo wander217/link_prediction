@@ -141,8 +141,6 @@ if __name__ == "__main__":
             data: dict = yaml.safe_load(f)
     if args.alphabet_path.strip():
         data['alphabet']['alphabet_path'] = args.alphabet_path.strip()
-    if args.label_path.strip():
-        data['label']['label_path'] = args.label_path.strip()
     if args.resume.strip():
         data['checkpoint']['resume'] = args.resume.strip()
     if args.root_path.strip():
