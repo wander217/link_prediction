@@ -122,7 +122,7 @@ class Trainer:
                 loss = self._criterion(predict, labels)
                 bath_acc: float = self._measure(predict, labels)
                 valid_loss.update(loss.item() * labels.size(0), labels.size(0))
-                accurate.update(bath_acc * labels.size(0), labels.size(0))
+                accurate.update(bath_acc, labels.size(0))
         return {
             "loss": valid_loss.calc(),
             "acc": accurate.calc(),
