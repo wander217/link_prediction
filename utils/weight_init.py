@@ -7,9 +7,6 @@ def init_weight(m):
     elif isinstance(m, nn.BatchNorm2d):
         m.weight.data.normal_(1., 0.02)
         m.bias.data.fill_(0.)
-    elif isinstance(m, nn.LayerNorm):
-        m.weight.data.normal_(1., 0.02)
-        m.bias.data.fill_(0.)
     elif isinstance(m, nn.Linear):
         m.weight.data.fill_(1.)
         m.bias.data.fill_(0.)
