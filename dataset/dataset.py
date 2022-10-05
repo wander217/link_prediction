@@ -51,6 +51,19 @@ def process(sample: Dict, alphabet: DocAlphabet):
             np.array(masks))
 
 
+def norm(element: np.ndarray) -> np.ndarray:
+    """
+    :param element: bounding box coordinate: (n, 8) or (n, 2)
+    :return: normed element
+    """
+    # b, _ = element.shape
+    mn = np.min(element, axis=0)
+    mx = np.max(element, axis=0)
+    normed_point = (element - mn) / (mx - mn)
+    normed_element = (normed_point - 0.5) / 0.5
+    return normed_element
+
+
 class DocDataset(Dataset):
     def __init__(self, path: str, alphabet: DocAlphabet, knn_num: int):
         self._alphabet: DocAlphabet = alphabet
@@ -85,6 +98,7 @@ class DocDataset(Dataset):
         graph = dgl.DGLGraph()
         graph.add_nodes(node_size)
         graph.add_edges(src, dst)
+        bboxes = norm(bboxes)
         return graph, labels, texts, lengths, bboxes, masks
 
     def _load(self, target_path: str):
