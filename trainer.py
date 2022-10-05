@@ -45,8 +45,8 @@ class Trainer:
         # measure constructor
         self._measure: Measure = Measure()
         # dataset constructor
-        self._train_loader: DataLoader = DocLoader(**train_loader).build()
-        self._valid_loader: DataLoader = DocLoader(**valid_loader).build()
+        self._train_loader: DataLoader = DocLoader(**train_loader, alphabet=self._alphabet).build()
+        self._valid_loader: DataLoader = DocLoader(**valid_loader, alphabet=self._alphabet).build()
         self._start_epoch: int = start_epoch
         self._total_epoch: int = total_epoch
 
