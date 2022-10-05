@@ -6,7 +6,7 @@ from dataset import DocAlphabet
 from torch import Tensor
 from dgl import batch
 from typing import Dict, List
-from utils import weight_init
+from utils import init_weight
 
 
 class DocLinkPrediction(PaCModule):
@@ -21,7 +21,7 @@ class DocLinkPrediction(PaCModule):
         self.encoder: Encoder = Encoder(**encoder)
         self.graph: GraphLayer = GraphLayer(**graph)
         self.decoder: FPN = FPN(**decoder)
-        self.apply(weight_init)
+        self.apply(init_weight)
 
     def forward(self,
                 txt: Tensor,
