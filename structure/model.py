@@ -12,14 +12,12 @@ from utils import init_weight
 class DocLinkPrediction(PaCModule):
     def __init__(self,
                  encoder: Dict,
-                 graph: Dict,
                  decoder: Dict,
                  alphabet: DocAlphabet):
         super().__init__()
         encoder['text_encoder']['vocab_len'] = alphabet.size()
         encoder['text_encoder']['max_len'] = alphabet.max_len
         self.encoder: Encoder = Encoder(**encoder)
-        self.graph: GraphLayer = GraphLayer(**graph)
         self.decoder: FPN = FPN(**decoder)
         self.apply(init_weight)
 
@@ -27,16 +25,10 @@ class DocLinkPrediction(PaCModule):
                 txt: Tensor,
                 mask: Tensor,
                 position: Tensor,
-                graph: batch,
-                node_factor: Tensor,
-                node_num: List):
+                graph: batch):
         node_feature: Tensor = self.encoder(txt=txt,
                                             mask=mask,
                                             position=position)
-        graph, node_feature = self.graph(graph=graph,
-                                         node_feature=node_feature,
-                                         node_factor=node_factor,
-                                         node_num=node_num)
         predict: Tensor = self.decoder(graph=graph,
                                        node_feature=node_feature)
         return predict

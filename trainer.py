@@ -80,13 +80,10 @@ class Trainer:
             texts = texts.to(self._device)
             masks = masks.to(self._device)
             bboxes = bboxes.to(self._device)
-            node_factors = node_factors.to(self._device)
             predict = self._model(graph=graphs,
                                   mask=masks,
                                   position=bboxes,
-                                  txt=texts,
-                                  node_factor=node_factors,
-                                  node_num=node_sizes)
+                                  txt=texts)
             loss = self._criterion(predict, labels)
             loss.backward()
             self._optim.step()
@@ -112,13 +109,10 @@ class Trainer:
                 texts = texts.to(self._device)
                 masks = masks.to(self._device)
                 bboxes = bboxes.to(self._device)
-                node_factors = node_factors.to(self._device)
                 predict = self._model(graph=graphs,
                                       mask=masks,
                                       position=bboxes,
-                                      txt=texts,
-                                      node_factor=node_factors,
-                                      node_num=node_sizes)
+                                      txt=texts)
                 loss = self._criterion(predict, labels)
                 bath_acc: float = self._measure(predict, labels)
                 valid_loss.update(loss.item() * labels.size(0), labels.size(0))

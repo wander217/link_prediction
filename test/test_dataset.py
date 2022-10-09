@@ -1,7 +1,7 @@
 from dataset import DocDataset, DocAlphabet
 
 alphabet = DocAlphabet(path=r'F:\project\python\link_prediction\asset\alphabet.txt', max_len=100)
-dataset = DocDataset(path=r'F:\project\python\doc_gen\dataset\train.json', alphabet=alphabet, knn_num=3)
+dataset = DocDataset(path=r'F:\project\python\doc_gen\dataset\train.json', alphabet=alphabet, knn_num=6)
 
 data = dataset.__getitem__(0)
 (graph, labels, texts, lengths, bboxes, masks) = data
@@ -15,5 +15,8 @@ src, dst = graph.edges()
 #     if src[i] == 9:
 #         print(src[i], dst[i])
 for i in range(len(labels)):
-    if labels[i]:
-        print(src[i], dst[i])
+    print("-"*50)
+    print(alphabet.decode(texts[src[i]]))
+    print(alphabet.decode(texts[dst[i]]))
+    print(src[i], dst[i], labels[i])
+    print("-" * 50)

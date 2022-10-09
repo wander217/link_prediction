@@ -37,7 +37,7 @@ class GraphLayer(PaCModule):
         :param node_feature: encoded feature (N, D)
         :param node_factor: node factor (N, 1)
         :param node_num: number of graph node (B, 1)
-       :return: graph:  new graph structure (new_node_feature + edge)
+        :return: graph:  new graph structure (new_node_feature + edge)
                 new_node_feature: new_node_feature (N, D)
         """
         all_node_feature: List = [node_feature]

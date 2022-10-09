@@ -19,20 +19,16 @@ structure:
     position_encoder:
       in_channel: 4
       out_channel: -1
-  graph:
-    in_channel: 512
-    out_channel: 512
-    num_layer: 2
-    dropout: 0.1
   decoder:
     in_channel: 512
     out_channel: 2
+    k: 50
 
 optimizer:
   name: 'Adam'
   params:
     lr: 0.001
-    betas: [0.5, 0.999]
+    betas: [ 0.5, 0.999 ]
 
 train_loader:
   batch_size: 4
