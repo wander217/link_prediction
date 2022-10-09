@@ -32,4 +32,4 @@ class FPN(PaCModule):
         src, tgt = graph.edges()
         src_feature: Tensor = self.fc1(node_feature[src])  # (N, 1)
         tgt_feature: Tensor = self.fc2(node_feature[tgt])  # (N, 1)
-        return torch.exp(-torch.abs(src_feature - tgt_feature)).squeeze()
+        return torch.exp(-torch.dist(src_feature, tgt_feature)).squeeze()
