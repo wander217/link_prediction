@@ -84,7 +84,7 @@ class Trainer:
                                   mask=masks,
                                   position=bboxes,
                                   txt=texts)
-            loss = self._criterion(predict, labels)
+            loss = self._criterion(predict, labels.float())
             loss.backward()
             self._optim.step()
             train_loss.update(loss.item() * labels.size(0), labels.size(0))
@@ -113,7 +113,7 @@ class Trainer:
                                       mask=masks,
                                       position=bboxes,
                                       txt=texts)
-                loss = self._criterion(predict, labels)
+                loss = self._criterion(predict, labels.float())
                 bath_acc: float = self._measure(predict, labels)
                 valid_loss.update(loss.item() * labels.size(0), labels.size(0))
                 accurate.update(bath_acc, labels.size(0))
