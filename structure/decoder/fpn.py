@@ -30,7 +30,6 @@ class FPN(PaCModule):
                 graph: DGLGraph,
                 node_feature: Tensor):
         src, tgt = graph.edges()
-        src_feature: Tensor = self.fc1(node_feature[src])  # (N, 2)
-        tgt_feature: Tensor = self.fc2(node_feature[tgt])  # (N, 2)
-        predict: Tensor = torch.reciprocal(1. + torch.exp(torch.abs(tgt_feature - src_feature) * self.k))  # (N, 2)
-        return predict.squeeze()
+        src_feature: Tensor = self.fc1(node_feature[src])  # (N, 1)
+        tgt_feature: Tensor = self.fc2(node_feature[tgt])  # (N, 1)
+        return torch.exp(-torch.abs(src_feature - tgt_feature)).squeeze()
