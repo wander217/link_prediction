@@ -15,18 +15,14 @@ class FPN(PaCModule):
         #     nn.LayerNorm(normalized_shape=out_channel),
         #     nn.LogSoftmax(dim=1))
         self.fc1: nn.Sequential = nn.Sequential(
-            nn.Linear(in_features=in_channel, out_features=in_channel // 2, bias=False),
+            nn.Linear(in_features=in_channel, out_features=in_channel // 2),
             nn.LayerNorm(normalized_shape=in_channel // 2),
-            nn.Linear(in_features=in_channel // 2, out_features=out_channel, bias=False),
-            nn.LayerNorm(normalized_shape=out_channel),
-            nn.ReLU(inplace=True)
+            nn.Linear(in_features=in_channel // 2, out_features=out_channel),
         )
         self.fc2: nn.Sequential = nn.Sequential(
-            nn.Linear(in_features=in_channel, out_features=in_channel // 2, bias=False),
+            nn.Linear(in_features=in_channel, out_features=in_channel // 2),
             nn.LayerNorm(normalized_shape=in_channel // 2),
-            nn.Linear(in_features=in_channel // 2, out_features=out_channel, bias=False),
-            nn.LayerNorm(normalized_shape=out_channel),
-            nn.ReLU(inplace=True)
+            nn.Linear(in_features=in_channel // 2, out_features=out_channel),
         )
         self.k: int = k
 
