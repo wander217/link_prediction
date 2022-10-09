@@ -36,5 +36,5 @@ class FPN(PaCModule):
         src, tgt = graph.edges()
         src_feature: Tensor = self.fc1(node_feature[src])  # (N, 2)
         tgt_feature: Tensor = self.fc2(node_feature[tgt])  # (N, 2)
-        predict: Tensor = torch.reciprocal(1. + torch.exp(self.k * torch.abs(tgt_feature - src_feature)))  # (N, 2)
+        predict: Tensor = torch.reciprocal(1. + torch.exp(torch.abs(tgt_feature - src_feature) * self.k))  # (N, 2)
         return predict
