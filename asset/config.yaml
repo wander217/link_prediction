@@ -21,7 +21,7 @@ structure:
       out_channel: -1
   decoder:
     in_channel: 512
-    out_channel: 2
+    out_channel: 1
     k: 50
 
 optimizer:

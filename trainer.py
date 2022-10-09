@@ -33,7 +33,7 @@ class Trainer:
         self._model: DocLinkPrediction = DocLinkPrediction(**structure, alphabet=self._alphabet)
         self._model = self._model.to(self._device)
         # criterion constructor
-        self._criterion: nn.NLLLoss = nn.NLLLoss()
+        self._criterion: nn.BCELoss = nn.BCELoss()
         self._criterion = self._criterion.to(self._device)
         # optimizer constructor
         optim_cls = getattr(optim, optimizer['name'])
